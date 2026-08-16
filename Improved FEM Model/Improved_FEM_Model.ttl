@@ -1,0 +1,1004 @@
+@prefix : <http://example.org/fem-ontology#> .
+@prefix fem: <http://example.org/fem-ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://example.org/fem-ontology#> .
+
+<http://example.org/fem-ontology> rdf:type owl:Ontology ;
+                                   rdfs:comment "Complete FEM/FeRAM drOWLing ontology implementation aligned with draw.io model and specification." ;
+                                   rdfs:label "FEM/FeRAM drOWLing Ontology (Full Implementation)" .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://example.org/fem-ontology#belongsToFlow
+fem:belongsToFlow rdf:type owl:ObjectProperty ;
+                  rdfs:domain fem:Unit_Process ;
+                  rdfs:range fem:Process_Flow ;
+                  rdfs:comment "Links a process step to the process flow it belongs to." ;
+                  rdfs:label "belongsToFlow" .
+
+
+###  http://example.org/fem-ontology#consistsOf
+fem:consistsOf rdf:type owl:ObjectProperty ;
+               rdfs:domain fem:Artifact ;
+               rdfs:range fem:Artifact ;
+               rdfs:comment "Specifies structural or physical sub-components that make up a device assembly or artifact." ;
+               rdfs:label "consistsOf" .
+
+
+###  http://example.org/fem-ontology#contains
+fem:contains rdf:type owl:ObjectProperty ;
+             rdfs:domain fem:Memory_Cell_Architecture ;
+             rdfs:range fem:Artifact ;
+             rdfs:comment "Indicates functional hardware elements contained within a memory cell architecture." ;
+             rdfs:label "contains" .
+
+
+###  http://example.org/fem-ontology#depositsMaterial
+fem:depositsMaterial rdf:type owl:ObjectProperty ;
+                     rdfs:domain fem:Deposition ;
+                     rdfs:range fem:Material ;
+                     rdfs:comment "Records which material a deposition step deposits." ;
+                     rdfs:label "depositsMaterial" .
+
+
+###  http://example.org/fem-ontology#directlyPrecedes
+fem:directlyPrecedes rdf:type owl:ObjectProperty ;
+                     rdfs:subPropertyOf fem:precedes ;
+                     rdfs:domain fem:Unit_Process ;
+                     rdfs:range fem:Unit_Process ;
+                     rdfs:comment "Indicates an immediate sequential process step precedence." ;
+                     rdfs:label "directlyPrecedes" .
+
+
+###  http://example.org/fem-ontology#etchesMaterial
+fem:etchesMaterial rdf:type owl:ObjectProperty ;
+                   rdfs:domain fem:Etch ;
+                   rdfs:range fem:Material ;
+                   rdfs:comment "Records which material an etch step targets." ;
+                   rdfs:label "etchesMaterial" .
+
+
+###  http://example.org/fem-ontology#flowProducesArchitecture
+fem:flowProducesArchitecture rdf:type owl:ObjectProperty ;
+                             rdfs:domain fem:Process_Flow ;
+                             rdfs:range [ rdf:type owl:Class ;
+                                          owl:unionOf ( fem:Layer_Stack
+                                                        fem:Memory_Cell_Architecture
+                                                      )
+                                        ] ;
+                             rdfs:comment "Links a process flow to the layer stack or architecture it produces." ;
+                             rdfs:label "flowProducesArchitecture" .
+
+
+###  http://example.org/fem-ontology#hasAmbient
+fem:hasAmbient rdf:type owl:ObjectProperty ;
+               rdfs:domain fem:Thermal_Process ;
+               rdfs:range fem:Material ;
+               rdfs:comment "Records ambient process gases used during thermal steps." ;
+               rdfs:label "hasAmbient" .
+
+
+###  http://example.org/fem-ontology#hasBottomElectrode
+fem:hasBottomElectrode rdf:type owl:ObjectProperty ;
+                       rdfs:subPropertyOf fem:hasElectrode ;
+                       rdfs:domain fem:MFM ;
+                       rdfs:range fem:Electrode_Material ;
+                       rdfs:comment "Records the bottom electrode of an MFM stack." ;
+                       rdfs:label "hasBottomElectrode" .
+
+
+###  http://example.org/fem-ontology#hasElectrode
+fem:hasElectrode rdf:type owl:ObjectProperty ;
+                 rdfs:domain fem:Layer_Stack ;
+                 rdfs:range fem:Electrode_Material ;
+                 rdfs:comment "Generic relation linking a stack to an electrode material." ;
+                 rdfs:label "hasElectrode" .
+
+
+###  http://example.org/fem-ontology#hasFerroelectricLayer
+fem:hasFerroelectricLayer rdf:type owl:ObjectProperty ;
+                          rdfs:domain fem:Layer_Stack ;
+                          rdfs:range fem:Ferroelectric_Material ;
+                          rdfs:comment "Records the ferroelectric layer in a stack." ;
+                          rdfs:label "hasFerroelectricLayer" .
+
+
+###  http://example.org/fem-ontology#hasInput
+fem:hasInput rdf:type owl:ObjectProperty ;
+             rdfs:domain fem:Unit_Process ;
+             rdfs:range [ rdf:type owl:Class ;
+                          owl:unionOf ( fem:Artifact
+                                        fem:Material
+                                      )
+                        ] ;
+             rdfs:comment "Inputs consumed or acted upon by a unit process." ;
+             rdfs:label "hasInput" .
+
+
+###  http://example.org/fem-ontology#hasInterfacialLayer
+fem:hasInterfacialLayer rdf:type owl:ObjectProperty ;
+                        rdfs:domain fem:Layer_Stack ;
+                        rdfs:range fem:Interfacial_Layer_Material ;
+                        rdfs:comment "Records interfacial layer present in the stack." ;
+                        rdfs:label "hasInterfacialLayer" .
+
+
+###  http://example.org/fem-ontology#hasLayer
+fem:hasLayer rdf:type owl:ObjectProperty ;
+             rdfs:domain fem:Layer_Stack ;
+             rdfs:range fem:Material ;
+             rdfs:comment "Generic link connecting a layer stack to constituent materials." ;
+             rdfs:label "hasLayer" .
+
+
+###  http://example.org/fem-ontology#hasMeasurement
+fem:hasMeasurement rdf:type owl:ObjectProperty ;
+                   rdfs:domain fem:Artifact ;
+                   rdfs:range fem:Measurement ;
+                   rdfs:comment "Links a specimen artifact to a measurement record." ;
+                   rdfs:label "hasMeasurement" .
+
+
+###  http://example.org/fem-ontology#hasPhase
+fem:hasPhase rdf:type owl:ObjectProperty ;
+             rdfs:domain [ rdf:type owl:Class ;
+                           owl:unionOf ( fem:Layer_Stack
+                                         fem:Material
+                                       )
+                         ] ;
+             rdfs:range fem:Phase_State ;
+             rdfs:comment "Links a material to its crystallographic phase state." ;
+             rdfs:label "hasPhase" .
+
+
+###  http://example.org/fem-ontology#hasTopElectrode
+fem:hasTopElectrode rdf:type owl:ObjectProperty ;
+                    rdfs:subPropertyOf fem:hasElectrode ;
+                    rdfs:domain fem:MFM ;
+                    rdfs:range fem:Electrode_Material ;
+                    rdfs:comment "Records the top electrode of an MFM stack." ;
+                    rdfs:label "hasTopElectrode" .
+
+
+###  http://example.org/fem-ontology#measuredOn
+fem:measuredOn rdf:type owl:ObjectProperty ;
+               rdfs:domain fem:Measurement ;
+               rdfs:range fem:Artifact ;
+               rdfs:comment "Records which artifact specimen a measurement was taken on." ;
+               rdfs:label "measuredOn" .
+
+
+###  http://example.org/fem-ontology#measurementMethod
+fem:measurementMethod rdf:type owl:ObjectProperty ;
+                      rdfs:domain fem:Measurement ;
+                      rdfs:range fem:Measurement_Method ;
+                      rdfs:comment "Records technique used for a measurement." ;
+                      rdfs:label "measurementMethod" .
+
+
+###  http://example.org/fem-ontology#measuresProperty
+fem:measuresProperty rdf:type owl:ObjectProperty ;
+                     rdfs:domain fem:Measurement ;
+                     rdfs:range fem:Measured_Property ;
+                     rdfs:comment "Records the physical property quantified by a measurement." ;
+                     rdfs:label "measuresProperty" .
+
+
+###  http://example.org/fem-ontology#precedes
+fem:precedes rdf:type owl:ObjectProperty ;
+             rdfs:domain fem:Unit_Process ;
+             rdfs:range fem:Unit_Process ;
+             rdfs:comment "Orders process steps chronologically." ;
+             rdfs:label "precedes" .
+
+
+###  http://example.org/fem-ontology#scavengesOxygenFrom
+fem:scavengesOxygenFrom rdf:type owl:ObjectProperty ;
+                        rdfs:domain fem:Electrode_Material ;
+                        rdfs:range fem:Ferroelectric_Material ;
+                        rdfs:comment "Records oxygen-scavenging action by an electrode." ;
+                        rdfs:label "scavengesOxygenFrom" .
+
+
+###  http://example.org/fem-ontology#transformsPhase
+fem:transformsPhase rdf:type owl:ObjectProperty ;
+                    rdfs:domain fem:Unit_Process ;
+                    rdfs:range fem:Phase_State ;
+                    rdfs:comment "Records crystallographic phase change induced by a process." ;
+                    rdfs:label "transformsPhase" .
+
+
+###  http://example.org/fem-ontology#usesEquipment
+fem:usesEquipment rdf:type owl:ObjectProperty ;
+                  rdfs:domain fem:Unit_Process ;
+                  rdfs:range fem:Equipment ;
+                  rdfs:comment "Records equipment used during a process step." ;
+                  rdfs:label "usesEquipment" .
+
+
+###  http://example.org/fem-ontology#usesStack
+fem:usesStack rdf:type owl:ObjectProperty ;
+              rdfs:domain fem:Memory_Cell_Architecture ;
+              rdfs:range fem:Layer_Stack ;
+              rdfs:comment "Links a cell architecture to its associated layer stack." ;
+              rdfs:label "usesStack" .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://example.org/fem-ontology#flowTargetsNode
+fem:flowTargetsNode rdf:type owl:DatatypeProperty ;
+                    rdfs:domain fem:Process_Flow ;
+                    rdfs:range xsd:string ;
+                    rdfs:comment "Specifies the technology node targeted by the process flow." ;
+                    rdfs:label "flowTargetsNode" .
+
+
+###  http://example.org/fem-ontology#hasAppliedVoltage_V
+fem:hasAppliedVoltage_V rdf:type owl:DatatypeProperty ;
+                        rdfs:domain fem:Measurement ;
+                        rdfs:range xsd:double ;
+                        rdfs:comment "Specifies the operating or testing voltage applied during metrology in Volts." ;
+                        rdfs:label "hasAppliedVoltage_V" .
+
+
+###  http://example.org/fem-ontology#hasArraySize_bit
+fem:hasArraySize_bit rdf:type owl:DatatypeProperty ;
+                     rdfs:domain fem:Memory_Array ;
+                     rdfs:range xsd:int ;
+                     rdfs:comment "Specifies total memory capacity of an array instance in bits." ;
+                     rdfs:label "hasArraySize_bit" .
+
+
+###  http://example.org/fem-ontology#hasBasePressure_mbar
+fem:hasBasePressure_mbar rdf:type owl:DatatypeProperty ;
+                         rdfs:domain fem:Unit_Process ;
+                         rdfs:range xsd:double ;
+                         rdfs:comment "Specifies initial baseline chamber pressure in millibars prior to processing." ;
+                         rdfs:label "hasBasePressure_mbar" .
+
+
+###  http://example.org/fem-ontology#hasCellArea_um2
+fem:hasCellArea_um2 rdf:type owl:DatatypeProperty ;
+                    rdfs:domain fem:Memory_Cell_Architecture ;
+                    rdfs:range xsd:double ;
+                    rdfs:comment "Specifies the physical surface footprint area of a memory cell in square micrometers." ;
+                    rdfs:label "hasCellArea_um2" .
+
+
+###  http://example.org/fem-ontology#hasCycleCount
+fem:hasCycleCount rdf:type owl:DatatypeProperty ;
+                  rdfs:domain fem:Unit_Process ;
+                  rdfs:range xsd:int ;
+                  rdfs:comment "Specifies the total number of execution cycles in cyclical deposition or testing steps." ;
+                  rdfs:label "hasCycleCount" .
+
+
+###  http://example.org/fem-ontology#hasDopantConcentration_atPct
+fem:hasDopantConcentration_atPct rdf:type owl:DatatypeProperty ;
+                                 rdfs:domain fem:Material ;
+                                 rdfs:range xsd:double ;
+                                 rdfs:comment "Specifies doping concentration in atomic percent." ;
+                                 rdfs:label "hasDopantConcentration_atPct" .
+
+
+###  http://example.org/fem-ontology#hasFilmThickness_nm
+fem:hasFilmThickness_nm rdf:type owl:DatatypeProperty ;
+                        rdfs:domain fem:Material ;
+                        rdfs:range xsd:double ;
+                        rdfs:comment "Specifies physical thickness of a thin film layer in nanometers." ;
+                        rdfs:label "hasFilmThickness_nm" .
+
+
+###  http://example.org/fem-ontology#hasGasFlow_sccm
+fem:hasGasFlow_sccm rdf:type owl:DatatypeProperty ;
+                    rdfs:domain fem:Unit_Process ;
+                    rdfs:range xsd:double ;
+                    rdfs:comment "Specifies process gas flow rate in standard cubic centimeters per minute." ;
+                    rdfs:label "hasGasFlow_sccm" .
+
+
+###  http://example.org/fem-ontology#hasGrainSize_nm
+fem:hasGrainSize_nm rdf:type owl:DatatypeProperty ;
+                    rdfs:domain fem:Material ;
+                    rdfs:range xsd:double ;
+                    rdfs:comment "Specifies average crystallite grain size in nanometers." ;
+                    rdfs:label "hasGrainSize_nm" .
+
+
+###  http://example.org/fem-ontology#hasGrowthPerCycle_nm
+fem:hasGrowthPerCycle_nm rdf:type owl:DatatypeProperty ;
+                         rdfs:domain fem:Unit_Process ;
+                         rdfs:range xsd:double ;
+                         rdfs:comment "Specifies film thickness deposited per single ALD cycle in nanometers." ;
+                         rdfs:label "hasGrowthPerCycle_nm" .
+
+
+###  http://example.org/fem-ontology#hasHfZrRatio
+fem:hasHfZrRatio rdf:type owl:DatatypeProperty ;
+                 rdfs:domain fem:Material ;
+                 rdfs:range xsd:double ;
+                 rdfs:comment "Specifies stoichiometric ratio of Hafnium to Zirconium in HZO films." ;
+                 rdfs:label "hasHfZrRatio" .
+
+
+###  http://example.org/fem-ontology#hasProcessDuration_s
+fem:hasProcessDuration_s rdf:type owl:DatatypeProperty ;
+                         rdfs:domain fem:Unit_Process ;
+                         rdfs:range xsd:double ;
+                         rdfs:comment "Specifies execution time of a unit process step in seconds." ;
+                         rdfs:label "hasProcessDuration_s" .
+
+
+###  http://example.org/fem-ontology#hasProcessPressure_mbar
+fem:hasProcessPressure_mbar rdf:type owl:DatatypeProperty ;
+                            rdfs:domain fem:Unit_Process ;
+                            rdfs:range xsd:double ;
+                            rdfs:comment "Specifies operational chamber pressure during processing in millibars." ;
+                            rdfs:label "hasProcessPressure_mbar" .
+
+
+###  http://example.org/fem-ontology#hasProcessTemperature_C
+fem:hasProcessTemperature_C rdf:type owl:DatatypeProperty ;
+                            rdfs:domain fem:Unit_Process ;
+                            rdfs:range xsd:double ;
+                            rdfs:comment "Specifies process operating temperature in degrees Celsius." ;
+                            rdfs:label "hasProcessTemperature_C" .
+
+
+###  http://example.org/fem-ontology#hasPulseTime_s
+fem:hasPulseTime_s rdf:type owl:DatatypeProperty ;
+                   rdfs:domain fem:Unit_Process ;
+                   rdfs:range xsd:double ;
+                   rdfs:comment "Specifies duration of precursor gas injection pulses in seconds." ;
+                   rdfs:label "hasPulseTime_s" .
+
+
+###  http://example.org/fem-ontology#hasPurgeTime_s
+fem:hasPurgeTime_s rdf:type owl:DatatypeProperty ;
+                   rdfs:domain fem:Unit_Process ;
+                   rdfs:range xsd:double ;
+                   rdfs:comment "Specifies duration of purge gas clearing cycles in seconds." ;
+                   rdfs:label "hasPurgeTime_s" .
+
+
+###  http://example.org/fem-ontology#hasSpaceGroup
+fem:hasSpaceGroup rdf:type owl:DatatypeProperty ;
+                  rdfs:domain fem:Phase_State ;
+                  rdfs:range xsd:string ;
+                  rdfs:comment "Specifies crystallographic space group notation." ;
+                  rdfs:label "hasSpaceGroup" .
+
+
+###  http://example.org/fem-ontology#hasTemperature_C
+fem:hasTemperature_C rdf:type owl:DatatypeProperty ;
+                     rdfs:domain fem:Measurement ;
+                     rdfs:range xsd:double ;
+                     rdfs:comment "Specifies ambient or stage temperature during testing in degrees Celsius." ;
+                     rdfs:label "hasTemperature_C" .
+
+
+###  http://example.org/fem-ontology#hasUnit
+fem:hasUnit rdf:type owl:DatatypeProperty ;
+            rdfs:domain fem:Measurement ;
+            rdfs:range xsd:string ;
+            rdfs:comment "Specifies standardized physical unit of measure." ;
+            rdfs:label "hasUnit" .
+
+
+###  http://example.org/fem-ontology#hasValue
+fem:hasValue rdf:type owl:DatatypeProperty ;
+             rdfs:domain fem:Measurement ;
+             rdfs:range xsd:double ;
+             rdfs:comment "Specifies quantitative numerical value obtained from a measurement." ;
+             rdfs:label "hasValue" .
+
+
+###  http://example.org/fem-ontology#isFerroelectric
+fem:isFerroelectric rdf:type owl:DatatypeProperty ;
+                    rdfs:domain fem:Phase_State ;
+                    rdfs:range xsd:boolean ;
+                    rdfs:comment "Boolean flag indicating whether a phase exhibits polar ferroelectricity." ;
+                    rdfs:label "isFerroelectric" .
+
+
+###  http://example.org/fem-ontology#operatingTime_ns
+fem:operatingTime_ns rdf:type owl:DatatypeProperty ;
+                     rdfs:domain fem:Memory_Array ;
+                     rdfs:range xsd:double ;
+                     rdfs:comment "Specifies array write/read access cycle time in nanoseconds." ;
+                     rdfs:label "operatingTime_ns" .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://example.org/fem-ontology#ALD
+fem:ALD rdf:type owl:Class ;
+        rdfs:subClassOf fem:Deposition ;
+        rdfs:comment "Atomic Layer Deposition process class based on sequential self-limiting surface reactions." ;
+        rdfs:label "ALD" .
+
+
+###  http://example.org/fem-ontology#Amorphous
+fem:Amorphous rdf:type owl:Class ;
+              rdfs:subClassOf fem:Phase_State ;
+              rdfs:comment "Non-crystalline phase lacking long-range atomic order." ;
+              rdfs:label "Amorphous" .
+
+
+###  http://example.org/fem-ontology#Artifact
+fem:Artifact rdf:type owl:Class ;
+             rdfs:comment "Physical substrate, integrated circuit specimen, array, or capacitor test vehicle." ;
+             rdfs:label "Artifact" .
+
+
+###  http://example.org/fem-ontology#BEOL_Process
+fem:BEOL_Process rdf:type owl:Class ;
+                 rdfs:subClassOf fem:Unit_Process ;
+                 rdfs:comment "Back-End-of-Line manufacturing steps integrating memory elements into interconnect layers." ;
+                 rdfs:label "BEOL_Process" .
+
+
+###  http://example.org/fem-ontology#Capacitor_Based_Cell
+fem:Capacitor_Based_Cell rdf:type owl:Class ;
+                         rdfs:subClassOf fem:Memory_Cell_Architecture ;
+                         rdfs:comment "Memory cell architecture using a ferroelectric capacitor for state storage." ;
+                         rdfs:label "Capacitor_Based_Cell" .
+
+
+###  http://example.org/fem-ontology#Crystalline_Phase
+fem:Crystalline_Phase rdf:type owl:Class ;
+                      rdfs:subClassOf fem:Phase_State ;
+                      rdfs:comment "Solid phase possessing long-range crystallographic order." ;
+                      rdfs:label "Crystalline_Phase" .
+
+
+###  http://example.org/fem-ontology#Crystallisation_Anneal
+fem:Crystallisation_Anneal rdf:type owl:Class ;
+                           rdfs:subClassOf fem:Thermal_Process ;
+                           rdfs:comment "Thermal process step driving phase transition from amorphous to crystalline state." ;
+                           rdfs:label "Crystallisation_Anneal" .
+
+
+###  http://example.org/fem-ontology#Deposition
+fem:Deposition rdf:type owl:Class ;
+               rdfs:subClassOf fem:Unit_Process ;
+               rdfs:comment "Additive manufacturing process forming thin film layers." ;
+               rdfs:label "Deposition" .
+
+
+###  http://example.org/fem-ontology#Deposition_Tool
+fem:Deposition_Tool rdf:type owl:Class ;
+                    rdfs:subClassOf fem:Equipment ;
+                    rdfs:comment "Processing tool dedicated to film deposition." ;
+                    rdfs:label "Deposition_Tool" .
+
+
+###  http://example.org/fem-ontology#Dielectric_Layer_Material
+fem:Dielectric_Layer_Material rdf:type owl:Class ;
+                              rdfs:subClassOf fem:Material ;
+                              rdfs:comment "Electrical insulating material." ;
+                              rdfs:label "Dielectric_Layer_Material" .
+
+
+###  http://example.org/fem-ontology#Doped_HfO2
+fem:Doped_HfO2 rdf:type owl:Class ;
+               rdfs:subClassOf fem:Ferroelectric_Material ;
+               rdfs:comment "Hafnium oxide doped with species such as Si, Zr, Al, Y, or La to induce ferroelectricity." ;
+               rdfs:label "Doped_HfO2" .
+
+
+###  http://example.org/fem-ontology#Electrode_Material
+fem:Electrode_Material rdf:type owl:Class ;
+                       rdfs:subClassOf fem:Material ;
+                       rdfs:comment "Electrically conductive material used for capacitor terminal contact layers." ;
+                       rdfs:label "Electrode_Material" .
+
+
+###  http://example.org/fem-ontology#Equipment
+fem:Equipment rdf:type owl:Class ;
+              rdfs:comment "Semiconductor fabrication equipment or metrology instrument." ;
+              rdfs:label "Equipment" .
+
+
+###  http://example.org/fem-ontology#Etch
+fem:Etch rdf:type owl:Class ;
+         rdfs:subClassOf fem:Unit_Process ;
+         rdfs:comment "Subtractive unit process selectively removing material regions." ;
+         rdfs:label "Etch" .
+
+
+###  http://example.org/fem-ontology#Etch_Tool
+fem:Etch_Tool rdf:type owl:Class ;
+              rdfs:subClassOf fem:Equipment ;
+              rdfs:comment "Tool equipment designed for plasma or wet chemical etching." ;
+              rdfs:label "Etch_Tool" .
+
+
+###  http://example.org/fem-ontology#FeRAM_1T1C_Capacitance_Sensed
+fem:FeRAM_1T1C_Capacitance_Sensed rdf:type owl:Class ;
+                                  rdfs:subClassOf fem:Capacitor_Based_Cell ;
+                                  rdfs:comment "1T1C FeRAM cell employing differential capacitance sensing." ;
+                                  rdfs:label "FeRAM_1T1C_Capacitance_Sensed" .
+
+
+###  http://example.org/fem-ontology#FeRAM_1T1C_Charge_Sensed
+fem:FeRAM_1T1C_Charge_Sensed rdf:type owl:Class ;
+                             rdfs:subClassOf fem:Capacitor_Based_Cell ;
+                             rdfs:comment "1T1C FeRAM cell employing polarization switching displacement charge sensing." ;
+                             rdfs:label "FeRAM_1T1C_Charge_Sensed" .
+
+
+###  http://example.org/fem-ontology#Ferroelectric_Material
+fem:Ferroelectric_Material rdf:type owl:Class ;
+                           rdfs:subClassOf fem:Material ;
+                           rdfs:comment "Material possessing spontaneous electric polarization reversible by electric field." ;
+                           rdfs:label "Ferroelectric_Material" .
+
+
+###  http://example.org/fem-ontology#Hafnium_Zirconate
+fem:Hafnium_Zirconate rdf:type owl:Class ;
+                      rdfs:subClassOf fem:Ferroelectric_Material ;
+                      rdfs:comment "Hf1-xZrxO2 solid solution binary dielectric material system." ;
+                      rdfs:label "Hafnium_Zirconate" .
+
+
+###  http://example.org/fem-ontology#Interfacial_Layer_Material
+fem:Interfacial_Layer_Material rdf:type owl:Class ;
+                               rdfs:subClassOf fem:Dielectric_Layer_Material ;
+                               rdfs:comment "Thin interfacial layer formed between electrode and ferroelectric film." ;
+                               rdfs:label "Interfacial_Layer_Material" .
+
+
+###  http://example.org/fem-ontology#Layer_Stack
+fem:Layer_Stack rdf:type owl:Class ;
+                rdfs:comment "Sequential vertical arrangement of thin material layers." ;
+                rdfs:label "Layer_Stack" .
+
+
+###  http://example.org/fem-ontology#Lithography
+fem:Lithography rdf:type owl:Class ;
+                rdfs:subClassOf fem:Unit_Process ;
+                rdfs:comment "Photolithographic pattern transfer unit process." ;
+                rdfs:label "Lithography" .
+
+
+###  http://example.org/fem-ontology#MFM
+fem:MFM rdf:type owl:Class ;
+        rdfs:subClassOf fem:Layer_Stack ;
+        rdfs:comment "Metal-Ferroelectric-Metal capacitor layer stack." ;
+        rdfs:label "MFM" .
+
+
+###  http://example.org/fem-ontology#Material
+fem:Material rdf:type owl:Class ;
+             rdfs:comment "Chemical substance or thin film composition used in semiconductor structures." ;
+             rdfs:label "Material" .
+
+
+###  http://example.org/fem-ontology#Measured_Property
+fem:Measured_Property rdf:type owl:Class ;
+                      rdfs:comment "Physical parameter or performance characteristic evaluated during measurement." ;
+                      rdfs:label "Measured_Property" .
+
+
+###  http://example.org/fem-ontology#Measurement
+fem:Measurement rdf:type owl:Class ;
+                rdfs:comment "Quantitative characterization record obtained from metrology tests." ;
+                rdfs:label "Measurement" .
+
+
+###  http://example.org/fem-ontology#Measurement_Method
+fem:Measurement_Method rdf:type owl:Class ;
+                       rdfs:comment "Characterization technique or protocol applied during metrology." ;
+                       rdfs:label "Measurement_Method" .
+
+
+###  http://example.org/fem-ontology#Memory_Array
+fem:Memory_Array rdf:type owl:Class ;
+                 rdfs:subClassOf fem:Artifact ;
+                 rdfs:comment "Integrated matrix array of memory cells." ;
+                 rdfs:label "Memory_Array" .
+
+
+###  http://example.org/fem-ontology#Memory_Cell_Architecture
+fem:Memory_Cell_Architecture rdf:type owl:Class ;
+                             rdfs:comment "Circuit design scheme defining individual memory element topologies." ;
+                             rdfs:label "Memory_Cell_Architecture" .
+
+
+###  http://example.org/fem-ontology#Orthorhombic_Pca21
+fem:Orthorhombic_Pca21 rdf:type owl:Class ;
+                       rdfs:subClassOf fem:Crystalline_Phase ;
+                       rdfs:comment "Non-centrosymmetric polar orthorhombic crystalline phase responsible for ferroelectricity in HfO2." ;
+                       rdfs:label "Orthorhombic_Pca21" .
+
+
+###  http://example.org/fem-ontology#PVD
+fem:PVD rdf:type owl:Class ;
+        rdfs:subClassOf fem:Deposition ;
+        rdfs:comment "Physical Vapor Deposition unit process." ;
+        rdfs:label "PVD" .
+
+
+###  http://example.org/fem-ontology#Phase_State
+fem:Phase_State rdf:type owl:Class ;
+                rdfs:comment "Crystallographic structure or phase state of a solid material." ;
+                rdfs:label "Phase_State" .
+
+
+###  http://example.org/fem-ontology#Polarisation_Property
+fem:Polarisation_Property rdf:type owl:Class ;
+                          rdfs:subClassOf fem:Measured_Property ;
+                          rdfs:comment "Ferroelectric polarization property such as remanent polarization or coercive field." ;
+                          rdfs:label "Polarisation_Property" .
+
+
+###  http://example.org/fem-ontology#Process_Flow
+fem:Process_Flow rdf:type owl:Class ;
+                 rdfs:comment "Sequential sequence of unit processes targeting a complete integrated device structure." ;
+                 rdfs:label "Process_Flow" .
+
+
+###  http://example.org/fem-ontology#Reliability_Property
+fem:Reliability_Property rdf:type owl:Class ;
+                         rdfs:subClassOf fem:Measured_Property ;
+                         rdfs:comment "Reliability parameter quantifying endurance, retention, or breakdown behavior." ;
+                         rdfs:label "Reliability_Property" .
+
+
+###  http://example.org/fem-ontology#Semiconductor
+fem:Semiconductor rdf:type owl:Class ;
+                  rdfs:subClassOf fem:Material ;
+                  rdfs:comment "Semiconducting material supporting transistor active channel zones." ;
+                  rdfs:label "Semiconductor" .
+
+
+###  http://example.org/fem-ontology#Single_Cell
+fem:Single_Cell rdf:type owl:Class ;
+                rdfs:subClassOf fem:Artifact ;
+                rdfs:comment "Individual isolated memory cell test structure specimen." ;
+                rdfs:label "Single_Cell" .
+
+
+###  http://example.org/fem-ontology#Substrate
+fem:Substrate rdf:type owl:Class ;
+              rdfs:subClassOf fem:Material ;
+              rdfs:comment "Base semiconductor wafer substrate." ;
+              rdfs:label "Substrate" .
+
+
+###  http://example.org/fem-ontology#Substrate_Preparation
+fem:Substrate_Preparation rdf:type owl:Class ;
+                          rdfs:subClassOf fem:Unit_Process ;
+                          rdfs:comment "Initial surface conditioning process executed on wafer substrates." ;
+                          rdfs:label "Substrate_Preparation" .
+
+
+###  http://example.org/fem-ontology#Thermal_ALD
+fem:Thermal_ALD rdf:type owl:Class ;
+                rdfs:subClassOf fem:ALD ;
+                rdfs:comment "Atomic layer deposition driven strictly by substrate thermal energy." ;
+                rdfs:label "Thermal_ALD" .
+
+
+###  http://example.org/fem-ontology#Thermal_Process
+fem:Thermal_Process rdf:type owl:Class ;
+                    rdfs:subClassOf fem:Unit_Process ;
+                    rdfs:comment "High-temperature annealing or thermal treatment step." ;
+                    rdfs:label "Thermal_Process" .
+
+
+###  http://example.org/fem-ontology#Thermal_Tool
+fem:Thermal_Tool rdf:type owl:Class ;
+                 rdfs:subClassOf fem:Equipment ;
+                 rdfs:comment "Furnace or rapid thermal processing tool equipment." ;
+                 rdfs:label "Thermal_Tool" .
+
+
+###  http://example.org/fem-ontology#Undoped_HfO2
+fem:Undoped_HfO2 rdf:type owl:Class ;
+                 rdfs:subClassOf fem:Ferroelectric_Material ;
+                 rdfs:comment "Stoichiometric binary HfO2 film." ;
+                 rdfs:label "Undoped_HfO2" .
+
+
+###  http://example.org/fem-ontology#Unit_Process
+fem:Unit_Process rdf:type owl:Class ;
+                 rdfs:comment "Discrete fabrication step within a semiconductor manufacturing line." ;
+                 rdfs:label "Unit_Process" .
+
+
+###  http://example.org/fem-ontology#Wet_Clean
+fem:Wet_Clean rdf:type owl:Class ;
+              rdfs:subClassOf fem:Substrate_Preparation ;
+              rdfs:comment "Chemical solution wafer cleaning treatment." ;
+              rdfs:label "Wet_Clean" .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://example.org/fem-ontology#ALD_Tool
+fem:ALD_Tool rdf:type owl:NamedIndividual ,
+                      fem:Deposition_Tool ;
+             rdfs:label "ALD_Tool" .
+
+
+###  http://example.org/fem-ontology#BEOL_Interconnect
+fem:BEOL_Interconnect rdf:type owl:NamedIndividual ,
+                               fem:BEOL_Process ;
+                      fem:belongsToFlow fem:FlowMyWork_1T1C_CUB ;
+                      fem:hasProcessDuration_s "1200.0"^^xsd:double ;
+                      fem:hasProcessTemperature_C "400.0"^^xsd:double ;
+                      rdfs:label "BEOL_Interconnect" .
+
+
+###  http://example.org/fem-ontology#Bottom_Electrode_Deposition
+fem:Bottom_Electrode_Deposition rdf:type owl:NamedIndividual ,
+                                         fem:PVD ;
+                                fem:belongsToFlow fem:FlowMyWork_1T1C_CUB ;
+                                fem:depositsMaterial fem:Bottom_TiN_Electrode ;
+                                fem:directlyPrecedes fem:Bottom_Electrode_Patterning ;
+                                fem:precedes fem:Bottom_Electrode_Patterning ;
+                                fem:usesEquipment fem:PVD_Tool ;
+                                fem:hasProcessTemperature_C "300.0"^^xsd:double ;
+                                rdfs:label "Bottom_Electrode_Deposition" .
+
+
+###  http://example.org/fem-ontology#Bottom_Electrode_Patterning
+fem:Bottom_Electrode_Patterning rdf:type owl:NamedIndividual ,
+                                         fem:Etch ;
+                                fem:belongsToFlow fem:FlowMyWork_1T1C_CUB ;
+                                fem:directlyPrecedes fem:HZO_Deposition ;
+                                fem:etchesMaterial fem:Bottom_TiN_Electrode ;
+                                fem:precedes fem:HZO_Deposition ;
+                                fem:usesEquipment fem:RIE_Tool ;
+                                fem:hasProcessDuration_s "180.0"^^xsd:double ;
+                                rdfs:label "Bottom_Electrode_Patterning" .
+
+
+###  http://example.org/fem-ontology#Bottom_TiN_Electrode
+fem:Bottom_TiN_Electrode rdf:type owl:NamedIndividual ,
+                                  fem:Electrode_Material ;
+                         fem:hasFilmThickness_nm "10.0"^^xsd:double ;
+                         rdfs:label "Bottom_TiN_Electrode" .
+
+
+###  http://example.org/fem-ontology#CMOS_FEOL_Fabrication
+fem:CMOS_FEOL_Fabrication rdf:type owl:NamedIndividual ,
+                                   fem:Unit_Process ;
+                          fem:belongsToFlow fem:FlowMyWork_1T1C_CUB ;
+                          fem:directlyPrecedes fem:Bottom_Electrode_Deposition ;
+                          fem:precedes fem:Bottom_Electrode_Deposition ;
+                          fem:hasProcessTemperature_C "1000.0"^^xsd:double ;
+                          rdfs:label "CMOS_FEOL_Fabrication" .
+
+
+###  http://example.org/fem-ontology#CVD_Tool
+fem:CVD_Tool rdf:type owl:NamedIndividual ,
+                      fem:Deposition_Tool ;
+             rdfs:label "CVD_Tool" .
+
+
+###  http://example.org/fem-ontology#Contact_Formation
+fem:Contact_Formation rdf:type owl:NamedIndividual ,
+                               fem:Unit_Process ;
+                      fem:belongsToFlow fem:FlowMyWork_1T1C_CUB ;
+                      fem:directlyPrecedes fem:BEOL_Interconnect ;
+                      fem:precedes fem:BEOL_Interconnect ;
+                      fem:hasProcessDuration_s "300.0"^^xsd:double ;
+                      rdfs:label "Contact_Formation" .
+
+
+###  http://example.org/fem-ontology#Electrical_Contact
+fem:Electrical_Contact rdf:type owl:NamedIndividual ,
+                                fem:Artifact ;
+                       fem:consistsOf fem:Bottom_TiN_Electrode ;
+                       rdfs:label "Electrical_Contact" .
+
+
+###  http://example.org/fem-ontology#Ferroelectric_Capacitor
+fem:Ferroelectric_Capacitor rdf:type owl:NamedIndividual ,
+                                     fem:Artifact ;
+                            fem:consistsOf fem:MFM_Structure ;
+                            fem:hasMeasurement fem:M_MyWork_EnduranceCycles ;
+                            rdfs:label "Ferroelectric_Capacitor" .
+
+
+###  http://example.org/fem-ontology#FlowMyWork_1T1C_CUB
+fem:FlowMyWork_1T1C_CUB rdf:type owl:NamedIndividual ,
+                                 fem:Process_Flow ;
+                        fem:flowProducesArchitecture fem:MFM_Structure ;
+                        fem:flowTargetsNode "130 nm CMOS" ;
+                        rdfs:label "FlowMyWork_1T1C_CUB" .
+
+
+###  http://example.org/fem-ontology#HZO_Deposition
+fem:HZO_Deposition rdf:type owl:NamedIndividual ,
+                            fem:Thermal_ALD ;
+                   fem:belongsToFlow fem:FlowMyWork_1T1C_CUB ;
+                   fem:depositsMaterial fem:Hf0_5Zr0_5O2 ;
+                   fem:directlyPrecedes fem:Top_Electrode_Deposition ;
+                   fem:precedes fem:Top_Electrode_Deposition ;
+                   fem:usesEquipment fem:ALD_Tool ;
+                   fem:hasCycleCount 100 ;
+                   fem:hasGrowthPerCycle_nm "0.1"^^xsd:double ;
+                   fem:hasProcessTemperature_C "300.0"^^xsd:double ;
+                   rdfs:label "HZO_Deposition" .
+
+
+###  http://example.org/fem-ontology#Hf0_5Zr0_5O2
+fem:Hf0_5Zr0_5O2 rdf:type owl:NamedIndividual ,
+                          fem:Hafnium_Zirconate ;
+                 fem:hasPhase fem:Phase_Orthorhombic_Pca21 ;
+                 fem:hasFilmThickness_nm "10.0"^^xsd:double ;
+                 fem:hasGrainSize_nm "8.5"^^xsd:double ;
+                 fem:hasHfZrRatio "0.5"^^xsd:double ;
+                 rdfs:label "Hf0.5Zr0.5O2" .
+
+
+###  http://example.org/fem-ontology#MFM_Patterning
+fem:MFM_Patterning rdf:type owl:NamedIndividual ,
+                            fem:Etch ;
+                   fem:belongsToFlow fem:FlowMyWork_1T1C_CUB ;
+                   fem:directlyPrecedes fem:Passivation_Deposition ;
+                   fem:precedes fem:Passivation_Deposition ;
+                   fem:usesEquipment fem:RIE_Tool ;
+                   fem:hasProcessDuration_s "240.0"^^xsd:double ;
+                   rdfs:label "MFM_Patterning" .
+
+
+###  http://example.org/fem-ontology#MFM_Structure
+fem:MFM_Structure rdf:type owl:NamedIndividual ,
+                           fem:MFM ;
+                  fem:hasBottomElectrode fem:Bottom_TiN_Electrode ;
+                  fem:hasFerroelectricLayer fem:Hf0_5Zr0_5O2 ;
+                  fem:hasTopElectrode fem:Top_TiN_Electrode ;
+                  rdfs:label "MFM_Structure" .
+
+
+###  http://example.org/fem-ontology#M_MyWork_EnduranceCycles
+fem:M_MyWork_EnduranceCycles rdf:type owl:NamedIndividual ,
+                                      fem:Measurement ;
+                             fem:measuredOn fem:MyWork_Memory_Array ;
+                             fem:hasAppliedVoltage_V "3.0"^^xsd:double ;
+                             fem:hasTemperature_C "25.0"^^xsd:double ;
+                             fem:hasUnit "cycles" ;
+                             fem:hasValue "1.0E10"^^xsd:double ;
+                             rdfs:label "M_MyWork_EnduranceCycles" .
+
+
+###  http://example.org/fem-ontology#MyWork_Memory_Array
+fem:MyWork_Memory_Array rdf:type owl:NamedIndividual ,
+                                 fem:Memory_Array ;
+                        fem:hasMeasurement fem:M_MyWork_EnduranceCycles ;
+                        fem:hasArraySize_bit 64000 ;
+                        fem:operatingTime_ns "10.0"^^xsd:double ;
+                        rdfs:label "Memory_Array (MyWork instance)" .
+
+
+###  http://example.org/fem-ontology#OneT1C_Memory_Cell
+fem:OneT1C_Memory_Cell rdf:type owl:NamedIndividual ,
+                                fem:Capacitor_Based_Cell ;
+                       fem:contains fem:Ferroelectric_Capacitor ,
+                                    fem:Transistor ;
+                       fem:usesStack fem:MFM_Structure ;
+                       fem:hasCellArea_um2 "0.5"^^xsd:double ;
+                       rdfs:label "1T1C_Memory_Cell" .
+
+
+###  http://example.org/fem-ontology#PVD_Tool
+fem:PVD_Tool rdf:type owl:NamedIndividual ,
+                      fem:Deposition_Tool ;
+             rdfs:label "PVD_Tool" .
+
+
+###  http://example.org/fem-ontology#Passivation_Deposition
+fem:Passivation_Deposition rdf:type owl:NamedIndividual ,
+                                    fem:Deposition ;
+                           fem:belongsToFlow fem:FlowMyWork_1T1C_CUB ;
+                           fem:depositsMaterial fem:Passivation_Material ;
+                           fem:directlyPrecedes fem:Contact_Formation ;
+                           fem:precedes fem:Contact_Formation ;
+                           fem:hasProcessTemperature_C "250.0"^^xsd:double ;
+                           rdfs:label "Passivation_Deposition" .
+
+
+###  http://example.org/fem-ontology#Passivation_Material
+fem:Passivation_Material rdf:type owl:NamedIndividual ,
+                                  fem:Dielectric_Layer_Material ;
+                         fem:hasFilmThickness_nm "100.0"^^xsd:double ;
+                         rdfs:label "Passivation_Material" .
+
+
+###  http://example.org/fem-ontology#Phase_Orthorhombic_Pca21
+fem:Phase_Orthorhombic_Pca21 rdf:type owl:NamedIndividual ,
+                                      fem:Orthorhombic_Pca21 ;
+                             fem:hasSpaceGroup "Pca2_1" ;
+                             fem:isFerroelectric "true"^^xsd:boolean ;
+                             rdfs:label "Orthorhombic_Pca21 Phase" .
+
+
+###  http://example.org/fem-ontology#RIE_Tool
+fem:RIE_Tool rdf:type owl:NamedIndividual ,
+                      fem:Etch_Tool ;
+             rdfs:label "RIE_Tool" .
+
+
+###  http://example.org/fem-ontology#RTA_Crystallization
+fem:RTA_Crystallization rdf:type owl:NamedIndividual ,
+                                 fem:Crystallisation_Anneal ;
+                        fem:belongsToFlow fem:FlowMyWork_1T1C_CUB ;
+                        fem:directlyPrecedes fem:MFM_Patterning ;
+                        fem:hasAmbient fem:Passivation_Material ;
+                        fem:precedes fem:MFM_Patterning ;
+                        fem:transformsPhase fem:Phase_Orthorhombic_Pca21 ;
+                        fem:usesEquipment fem:RTA_Equipment ;
+                        fem:hasProcessDuration_s "30.0"^^xsd:double ;
+                        fem:hasProcessTemperature_C "500.0"^^xsd:double ;
+                        rdfs:label "RTA_Crystallization" .
+
+
+###  http://example.org/fem-ontology#RTA_Equipment
+fem:RTA_Equipment rdf:type owl:NamedIndividual ,
+                           fem:Thermal_Tool ;
+                  rdfs:label "RTA" .
+
+
+###  http://example.org/fem-ontology#Silicon
+fem:Silicon rdf:type owl:NamedIndividual ,
+                     fem:Substrate ;
+            rdfs:label "Silicon" .
+
+
+###  http://example.org/fem-ontology#Top_Electrode_Deposition
+fem:Top_Electrode_Deposition rdf:type owl:NamedIndividual ,
+                                      fem:PVD ;
+                             fem:belongsToFlow fem:FlowMyWork_1T1C_CUB ;
+                             fem:depositsMaterial fem:Top_TiN_Electrode ;
+                             fem:directlyPrecedes fem:RTA_Crystallization ;
+                             fem:precedes fem:RTA_Crystallization ;
+                             fem:usesEquipment fem:PVD_Tool ;
+                             fem:hasProcessTemperature_C "300.0"^^xsd:double ;
+                             rdfs:label "Top_Electrode_Deposition" .
+
+
+###  http://example.org/fem-ontology#Top_TiN_Electrode
+fem:Top_TiN_Electrode rdf:type owl:NamedIndividual ,
+                               fem:Electrode_Material ;
+                      fem:scavengesOxygenFrom fem:Hf0_5Zr0_5O2 ;
+                      fem:hasFilmThickness_nm "10.0"^^xsd:double ;
+                      rdfs:label "Top_TiN_Electrode" .
+
+
+###  http://example.org/fem-ontology#Transistor
+fem:Transistor rdf:type owl:NamedIndividual ,
+                        fem:Artifact ;
+               fem:hasLayer fem:Silicon ;
+               rdfs:label "Transistor" .
+
+
+###  http://example.org/fem-ontology#Wet_Clean_Step
+fem:Wet_Clean_Step rdf:type owl:NamedIndividual ,
+                            fem:Wet_Clean ;
+                   fem:belongsToFlow fem:FlowMyWork_1T1C_CUB ;
+                   fem:directlyPrecedes fem:CMOS_FEOL_Fabrication ;
+                   fem:hasInput fem:Silicon ;
+                   fem:precedes fem:CMOS_FEOL_Fabrication ;
+                   fem:hasProcessDuration_s "600.0"^^xsd:double ;
+                   rdfs:label "Wet_Clean_Step" .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
